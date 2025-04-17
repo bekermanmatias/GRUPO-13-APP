@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollViewLogin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_white"
+    android:padding="16dp"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/tvLoginTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bienvenido!"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/text_black" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <EditText
+            android:id="@+id/etUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre de usuario" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contraseña"
+            android:inputType="textPassword" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/primary_blue"
+            android:text="Iniciar Sesion"
+            android:textColor="@color/background_white"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/secondary_gray"
+            android:text="Registrarse"
+            android:textColor="@color/text_black" />
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+        <TextView
+            android:id="@+id/tvErrorMsg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primary_blue"
+            android:visibility="gone"
+            android:text="Mensaje de error" />
+
+    </LinearLayout>
+</ScrollView>

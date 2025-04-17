@@ -1,0 +1,144 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollViewWelcome"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_white"
+    android:padding="16dp"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:id="@+id/llWelcomeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Espacio extra para bajar todos los componentes -->
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="32dp" /> <!-- Ajusta el valor según el espacio que necesites -->
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <!-- Título -->
+        <TextView
+            android:id="@+id/tvWelcomeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bienvenido a la aplicación"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/text_black"
+            android:layout_gravity="center_horizontal" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="24dp" />
+
+        <!-- Selección de plataforma -->
+        <TextView
+            android:id="@+id/tvEligePlataforma"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Elige tu plataforma:"
+            android:textColor="@color/text_black" />
+
+        <RadioGroup
+            android:id="@+id/rgPlataformas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbAndroid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Android" />
+
+            <RadioButton
+                android:id="@+id/rbIOS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="IOS" />
+        </RadioGroup>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <!-- Imagen del logo -->
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_android"
+            android:contentDescription="Logo de la plataforma" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="24dp" />
+
+        <!-- Preferencias -->
+        <TextView
+            android:id="@+id/tvPreferencias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Selecciona tus preferencias:"
+            android:textColor="@color/text_black" />
+
+        <CheckBox
+            android:id="@+id/cbPreferencia1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Programación" />
+
+        <CheckBox
+            android:id="@+id/cbPreferencia2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Redes" />
+
+        <CheckBox
+            android:id="@+id/cbPreferencia3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seguridad" />
+
+        <CheckBox
+            android:id="@+id/cbPreferencia4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hardware" />
+
+        <CheckBox
+            android:id="@+id/cbPreferenciaOtra"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Otra" />
+
+        <!-- Campo para ingresar preferencia personalizada -->
+        <EditText
+            android:id="@+id/etOtraPreferencia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Especifica tu preferencia"
+            android:visibility="gone"
+            android:inputType="text" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="24dp" />
+
+        <!-- Botón continuar -->
+        <Button
+            android:id="@+id/btnContinuar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Continuar"
+            android:backgroundTint="@color/primary_blue"
+            android:textColor="@color/background_white" />
+
+    </LinearLayout>
+</ScrollView>

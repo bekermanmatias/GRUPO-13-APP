@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Colores definidos en tu código Kotlin -->
+    <color name="primary_blue">#1761D9</color>
+    <color name="secondary_gray">#B0BEC5</color>
+    <color name="background_white">#FFFFFF</color>
+    <color name="text_black">#000000</color>
+</resources>

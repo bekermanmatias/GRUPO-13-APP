@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Personaliza los colores -->
+        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="colorSecondary">@color/secondary_gray</item>
+        <item name="android:windowBackground">@color/background_white</item>
+        <item name="android:textColor">@color/text_black</item>
+    </style>
+
+</resources>
