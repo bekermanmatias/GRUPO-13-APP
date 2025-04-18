@@ -14,9 +14,15 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+
+
 
 import com.example.app1.R
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun WelcomeScreen(navController: NavController) {
     var selectedPlatform by remember { mutableStateOf("Android") }
@@ -87,25 +93,47 @@ fun WelcomeScreen(navController: NavController) {
 
         Text("Seleccioná tus preferencias:")
 
-        preferences.forEach { (label, isChecked) ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-                    .toggleable(
-                        value = isChecked,
-                        onValueChange = { preferences[label] = it }
+        Spacer(modifier = Modifier.height(8.dp))
+
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            // Reordenamos para que "Otra" esté siempre al final
+            val sortedPreferences = preferences.toSortedMap(compareBy {
+                if (it == "Otra") "zzzz" else it
+            })
+
+            sortedPreferences.forEach { (label, isChecked) ->
+                Card(
+                    modifier = Modifier
+                        .toggleable(
+                            value = isChecked,
+                            onValueChange = { preferences[label] = it }
+                        ),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (isChecked) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
                     ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Checkbox(
-                    checked = isChecked,
-                    onCheckedChange = null
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(label)
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .padding(horizontal = 12.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(
+                            checked = isChecked,
+                            onCheckedChange = null,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(text = label)
+                    }
+                }
             }
         }
+
 
         // Si elige "Otra", mostrar campo extra
         if (preferences["Otra"] == true) {

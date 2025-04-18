@@ -14,7 +14,7 @@ import  com.example.app1.screens.ContactScreen
 fun NavHostScreen() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "Welcome") {
+    NavHost(navController = navController, startDestination = "login") {
         composable("welcome") { WelcomeScreen(navController) }
         composable("login") { LoginScreen(navController) }
         composable("register") { RegisterScreen(navController) }
