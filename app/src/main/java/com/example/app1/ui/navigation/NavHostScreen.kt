@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.*
 import com.example.app1.screens.*
 
+
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun NavHostScreen() {
@@ -14,18 +15,19 @@ fun NavHostScreen() {
     // Usamos NavHost para gestionar las pantallas
     NavHost(
         navController = navController,
-        startDestination = "login"
+        startDestination = "start"
     ) {
-        // Pantalla Welcome con animación
-        composable("welcome") {
+        // Pantalla start con animación
+        composable("start") {
             AnimatedVisibility(
                 visible = true,
                 enter = slideInHorizontally(initialOffsetX = { 1000 }) + fadeIn(animationSpec = tween(700)),
                 exit = slideOutHorizontally(targetOffsetX = { -1000 }) + fadeOut(animationSpec = tween(700))
             ) {
-                WelcomeScreen(navController)
+                StartScreen(navController)
             }
         }
+
 
         // Pantalla Login con animación
         composable("login") {
@@ -46,6 +48,17 @@ fun NavHostScreen() {
                 exit = slideOutHorizontally(targetOffsetX = { -1000 }) + fadeOut(animationSpec = tween(700))
             ) {
                 RegisterScreen(navController)
+            }
+        }
+
+        // Pantalla Welcome con animación
+        composable("welcome") {
+            AnimatedVisibility(
+                visible = true,
+                enter = slideInHorizontally(initialOffsetX = { 1000 }) + fadeIn(animationSpec = tween(700)),
+                exit = slideOutHorizontally(targetOffsetX = { -1000 }) + fadeOut(animationSpec = tween(700))
+            ) {
+                WelcomeScreen(navController)
             }
         }
 

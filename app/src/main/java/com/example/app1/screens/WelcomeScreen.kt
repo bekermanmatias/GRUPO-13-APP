@@ -149,7 +149,7 @@ fun WelcomeScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
-            onClick = { navController.navigate("login") },
+            onClick = { navController.navigate("start") },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Cerrar sesión")

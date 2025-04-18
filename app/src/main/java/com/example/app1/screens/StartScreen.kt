@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -40,10 +41,13 @@ fun StartScreen(navController: NavController) {
         ) {
             // Logo en la parte superior
             Image(
-                painter = painterResource(id = R.drawable.ic_logo),  // Asegúrate de tener tu logo en res/drawable
+                painter = painterResource(id = R.drawable.ic_logo),
                 contentDescription = "App Logo",
-                modifier = Modifier.size(180.dp),
-                contentScale = ContentScale.Fit
+                modifier = Modifier
+                    .size(200.dp)
+                    .clip(RoundedCornerShape(24.dp)) // Aplica el redondeo
+                    .background(Color.White.copy(alpha = 0.1f)), // Fondo opcional
+                contentScale = ContentScale.Crop
             )
 
             Spacer(modifier = Modifier.height(80.dp))  // Espacio entre el logo y los botones
@@ -63,7 +67,7 @@ fun StartScreen(navController: NavController) {
                 Text(
                     "Iniciar sesión",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
+                    fontSize = 18.sp
                 )
             }
 
@@ -84,7 +88,7 @@ fun StartScreen(navController: NavController) {
                 Text(
                     "Registrarse",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
+                    fontSize = 18.sp
                 )
             }
         }
