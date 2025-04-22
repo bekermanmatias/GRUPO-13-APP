@@ -1,6 +1,5 @@
 package com.example.app1.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -10,25 +9,38 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.graphics.Color
 
 
-private val LightColorScheme = lightColorScheme(
-    primary = PrimaryBlue,
-    secondary = SecondaryGray,
-    background = BackgroundWhite,
-    surface = BackgroundWhite,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = TextBlack,
-    onSurface = TextBlack
+// Esquema de colores para el tema claro
+private val lightColors = lightColorScheme(
+    primary = Purple1,                 // Color púrpura personalizado
+    secondary = Blue1,                 // Color azul personalizado
+    background = BackgroundWhite,     // Fondo blanco
+    surface = WhiteOpacity15,          // Blanco con opacidad 15% en el surface
+    surfaceVariant = WhiteTransparent,  // Efecto vidrio
+    error = ErrorRed,                  // Rojo para errores
+    onPrimary = BackgroundWhite,       // Texto blanco sobre el color primario
+    onSecondary = TextBlack,           // Texto negro sobre el color secundario
+    onBackground = TextBlack,          // Texto negro sobre el fondo blanco
+    onSurface = TextBlack,             // Texto negro sobre el surface
+    onError = BackgroundWhite          // Texto blanco sobre el error
 )
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+// Esquema de colores para el tema oscuro
+private val darkColors = darkColorScheme(
+    primary = Purple1,                 // Color púrpura personalizado
+    secondary = Blue1,                 // Color azul personalizado
+    background = TextBlack,           // Fondo negro para tema oscuro
+    surface = WhiteOpacity05,          // Blanco con opacidad 5% en el surface para tema oscuro
+    surfaceVariant = WhiteTransparent,  // Efecto vidrio
+    error = ErrorRed,                  // Rojo para errores
+    onPrimary = BackgroundWhite,       // Texto blanco sobre el color primario
+    onSecondary = BackgroundWhite,     // Texto blanco sobre el color secundario
+    onBackground = BackgroundWhite,    // Texto blanco sobre el fondo oscuro
+    onSurface = BackgroundWhite,       // Texto blanco sobre el surface oscuro
+    onError = TextBlack                // Texto negro sobre el error
 )
+
 
 @Composable
 fun App1Theme(
@@ -43,8 +55,8 @@ fun App1Theme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> darkColors
+        else -> lightColors
     }
 
     MaterialTheme(
