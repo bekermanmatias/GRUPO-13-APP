@@ -11,7 +11,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             // Usamos App1Theme para envolver la aplicación con el tema personalizado
-            App1Theme {
+            App1Theme(darkTheme = false) {
                 // Aquí aplicamos el tema y luego iniciamos la pantalla principal
                 NavHostScreen()  // Iniciamos el NavHost para la navegación
             }

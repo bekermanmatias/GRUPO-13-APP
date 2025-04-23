@@ -1,5 +1,6 @@
 package com.example.app1.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -10,21 +11,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.app1.R
+import com.example.app1.R.drawable.logdef
+import com.example.app1.ui.theme.AccentPink
+import com.example.app1.ui.theme.App1Theme
+import com.example.app1.ui.theme.DarkText
+import com.example.app1.ui.theme.Error
+import com.example.app1.ui.theme.LocalAppGradients
 
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -32,20 +36,14 @@ fun LoginScreen(navController: NavController) {
     var password by remember { mutableStateOf(TextFieldValue("")) }
     var errorMessage by remember { mutableStateOf("") }
 
+    val gradientBackground = LocalAppGradients.current.background
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF6a11cb).copy(alpha = 0.9f),
-                        Color(0xFF2575fc).copy(alpha = 0.9f)
-                    )
-                )
-            )
+            .background(gradientBackground)
             .systemBarsPadding()
     ) {
-        // Fondo difuminado
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -55,91 +53,92 @@ fun LoginScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp),
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_logo),
+                painter = painterResource(id = logdef),
                 contentDescription = "App Logo",
                 modifier = Modifier
-                    .size(180.dp)
-                    .clip(RoundedCornerShape(24.dp)) // Aplica el redondeo
-                    .background(White.copy(alpha = 0.1f)), // Fondo opcional
+                    .size(160.dp)
+                    .clip(RoundedCornerShape(24.dp)),
                 contentScale = ContentScale.Crop
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
-
             Text(
-                text = "Iniciar sesión",
+                text = "Bienvenid@!",
                 style = MaterialTheme.typography.headlineLarge.copy(
                     fontWeight = FontWeight.Bold,
-                    color = White,
-                    fontSize = 28.sp
+                    color = DarkText,
+                    fontSize = 26.sp
                 ),
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // FORMULARIO
+            // Columna para los campos de entrada y el mensaje de error
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(White.copy(alpha = 0.15f), RoundedCornerShape(24.dp))
-                    .padding(24.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                    .background(Color.White.copy(alpha = 0.3f), RoundedCornerShape(24.dp))
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(2.dp) // Esto mantiene el espacio entre los elementos
             ) {
+                // Reservar espacio para el mensaje de error dentro del recuadro
+                if (errorMessage.isNotBlank()) {
+                    Text(
+                        text = errorMessage,
+                        color = Error,
+                        fontSize = 14.sp,
+                        modifier = Modifier
+                            .padding(bottom = 0.1.dp), // Espacio entre el error y el siguiente campo
+                        textAlign = TextAlign.Center
+                    )
+                }
+
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
-                    label = { Text("Nombre de usuario", color = White.copy(alpha = 0.8f)) },
+                    label = { Text("Nombre de usuario", color = DarkText.copy(alpha = 0.8f)) },
                     singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(White.copy(alpha = 0.1f), shape = RoundedCornerShape(8.dp)),
+                    modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.Transparent,
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedTextColor = White,
-                        focusedTextColor = White,
-                        cursorColor = White,
-                        unfocusedIndicatorColor = White.copy(alpha = 0.5f),
-                        focusedIndicatorColor = White
+                        unfocusedContainerColor = Color.White.copy(alpha = 0.3f),
+                        focusedContainerColor = Color.White.copy(alpha = 0.3f),
+                        unfocusedTextColor = DarkText,
+                        focusedTextColor = DarkText,
+                        cursorColor = DarkText,
+                        unfocusedIndicatorColor = DarkText.copy(alpha = 0.5f),
+                        focusedIndicatorColor = DarkText
                     )
                 )
 
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    label = { Text("Contraseña", color = White.copy(alpha = 0.8f)) },
+                    label = { Text("Contraseña", color = DarkText.copy(alpha = 0.8f)) },
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(White.copy(alpha = 0.1f), shape = RoundedCornerShape(8.dp)),
+                    modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.Transparent,
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedTextColor = White,
-                        focusedTextColor = White,
-                        cursorColor = White,
-                        unfocusedIndicatorColor = White.copy(alpha = 0.5f),
-                        focusedIndicatorColor = White
+                        unfocusedContainerColor = Color.White.copy(alpha = 0.3f),
+                        focusedContainerColor = Color.White.copy(alpha = 0.3f),
+                        unfocusedTextColor = DarkText,
+                        focusedTextColor = DarkText,
+                        cursorColor = DarkText,
+                        unfocusedIndicatorColor = DarkText.copy(alpha = 0.5f),
+                        focusedIndicatorColor = DarkText
                     )
                 )
+
+                Spacer(modifier = Modifier.height(6.dp))
 
                 Button(
                     onClick = {
                         errorMessage = when {
-                            username.text.isBlank() || password.text.isBlank() -> {
-                                "Por favor, completá ambos campos."
-                            }
-                            username.text != "Juan Torres" || password.text != "1234utn" -> {
-                                "Usuario o contraseña incorrectos."
-                            }
+                            username.text.isBlank() || password.text.isBlank() -> "Por favor, completá ambos campos."
+                            username.text != "Juan Torres" || password.text != "1234utn" -> "Usuario o contraseña incorrectos."
                             else -> {
                                 navController.navigate("welcome")
                                 ""
@@ -148,77 +147,63 @@ fun LoginScreen(navController: NavController) {
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(50.dp),
+                        .height(48.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = White,
-                        contentColor = Color(0xFF6a11cb)
+                        containerColor = AccentPink,
+                        contentColor = Color.White
                     )
                 ) {
                     Text("Iniciar sesión", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 }
 
-                // Enlaces inferiores
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    // Registrarse
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = White.copy(alpha = 0.15f)
-                    ) {
-                        TextButton(
-                            onClick = { navController.navigate("register") },
-                            modifier = Modifier.padding(horizontal = 12.dp)
-                        ) {
-                            Text(
-                                "Registrarse",
-                                color = White,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
+                Spacer(modifier = Modifier.height(6.dp))
 
-                    // Ayuda
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = White.copy(alpha = 0.1f)
-                    ) {
-                        TextButton(
-                            onClick = { navController.navigate("contact") },
-                            modifier = Modifier.padding(horizontal = 12.dp)
-                        ) {
-                            Text(
-                                "Ayuda",
-                                color = White,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
+                OutlinedButton(
+                    onClick = {
+                        navController.navigate("register")
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = DarkText,
+                    ),
+                    border = ButtonDefaults.outlinedButtonBorder
+                ) {
+                    Text("Registrarse", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 }
 
+                Spacer(modifier = Modifier.height(6.dp))
 
-                // Mensaje de error
-                if (errorMessage.isNotEmpty()) {
-                    Text(
-                        text = errorMessage,
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp)
-                    )
+                // Botón de contacto
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    TextButton(onClick = {
+                        navController.navigate("contact")
+                    }) {
+                        Text("¿Necesitás ayuda? Contacto", color = DarkText.copy(alpha = 0.9f))
+                    }
                 }
             }
         }
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
-fun PreviewLoginScreen() {
-    val navController = rememberNavController()
-    LoginScreen(navController = navController)
+fun PreviewLoginScreenLight() {
+    App1Theme(darkTheme = false) {
+        LoginScreen(navController = rememberNavController())
+    }
+}
+
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun PreviewLoginScreenDark() {
+    App1Theme(darkTheme = true) {
+        LoginScreen(navController = rememberNavController())
+    }
 }
