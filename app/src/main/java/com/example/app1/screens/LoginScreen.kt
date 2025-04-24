@@ -75,7 +75,8 @@ fun LoginScreen(navController: NavController) {
 
             TypewriterText(
                 text = "¡¡Bienvenid@!!",
-                modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)
+                modifier = Modifier.padding(bottom = 8.dp, top = 8.dp),
+                color = DarkText
             )
 
 

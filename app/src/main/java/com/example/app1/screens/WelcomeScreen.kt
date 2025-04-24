@@ -1,26 +1,38 @@
 package com.example.app1.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
-
-
-
+import androidx.navigation.compose.rememberNavController
 import com.example.app1.R
+import com.example.app1.components.TypewriterText
+import com.example.app1.ui.theme.AccentPink
+import com.example.app1.ui.theme.App1Theme
+import com.example.app1.ui.theme.DarkText
+import com.example.app1.ui.theme.JetBrainsMono
+import com.example.app1.ui.theme.LocalAppGradients
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -37,122 +49,213 @@ fun WelcomeScreen(navController: NavController) {
     }
     var otherPreference by remember { mutableStateOf(TextFieldValue("")) }
 
-    Column(
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.Start
+            .background(LocalAppGradients.current.background)
+            .systemBarsPadding()
     ) {
-        Text(
-            text = "Bienvenido a la aplicación Juan Torres",
-            style = MaterialTheme.typography.headlineSmall
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .blur(4.dp)
         )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text("Seleccioná tu plataforma:")
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),  // Asegura que el Row ocupe todo el ancho
-            horizontalArrangement = Arrangement.Center,  // Centra las imágenes horizontalmente
-            verticalAlignment = Alignment.CenterVertically  // Centra las imágenes verticalmente
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
         ) {
-            // Imagen de Android
-            Image(
-                painter = painterResource(id = R.drawable.ic_android),
-                contentDescription = "Logo de Android",
+
+                    Spacer(modifier = Modifier.height(28.dp))
+
+            TypewriterText(
+                text = "¡Bienvenido a la app, Juan Torres!",
+                delayMillis = 50L,
                 modifier = Modifier
-                    .size(80.dp)
-                    .clickable {
-                        selectedPlatform = "Android"
-                    },
-                colorFilter = if (selectedPlatform == "Android") ColorFilter.tint(MaterialTheme.colorScheme.primary) else ColorFilter.tint(Color.Gray)
+                    .fillMaxWidth()
+                    .height(100.dp)               // altura fija para no reflujo
+                    .padding(bottom = 24.dp),
+                textAlign = TextAlign.Start,
+                textStyle = MaterialTheme.typography.headlineSmall.copy(
+                    fontFamily = JetBrainsMono,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                              // coincide con la altura reservada
+                ),
+                color = DarkText,
             )
 
-            // Espaciado entre los logos
-            Spacer(modifier = Modifier.width(64.dp))  // Espaciado entre los logos
 
-            // Imagen de iOS
-            Image(
-                painter = painterResource(id = R.drawable.ic_ios),
-                contentDescription = "Logo de iOS",
+
+
+
+
+
+
+            Text(
+                text = "Seleccioná tu plataforma:",
                 modifier = Modifier
-                    .size(80.dp)
-                    .clickable {
-                        selectedPlatform = "iOS"
-                    },
-                colorFilter = if (selectedPlatform == "iOS") ColorFilter.tint(MaterialTheme.colorScheme.primary) else ColorFilter.tint(Color.Gray)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Start,
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontFamily = JetBrainsMono,
+                    fontSize = 16.sp
+                )
             )
-        }
-
-
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Text("Seleccioná tus preferencias:")
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            // Reordenamos para que "Otra" esté siempre al final
-            val sortedPreferences = preferences.toSortedMap(compareBy {
-                if (it == "Otra") "zzzz" else it
-            })
-
-            sortedPreferences.forEach { (label, isChecked) ->
-                Card(
+            Spacer(modifier = Modifier.height(24.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_android),
+                    contentDescription = "Logo de Android",
                     modifier = Modifier
-                        .toggleable(
-                            value = isChecked,
+                        .size(80.dp)
+                        .clickable { selectedPlatform = "Android" },
+                    colorFilter = if (selectedPlatform == "Android")
+                        ColorFilter.tint(AccentPink)
+                    else
+                        ColorFilter.tint(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                )
+                Spacer(modifier = Modifier.width(48.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.ic_ios),
+                    contentDescription = "Logo de iOS",
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clickable { selectedPlatform = "iOS" },
+                    colorFilter = if (selectedPlatform == "iOS")
+                        ColorFilter.tint(AccentPink)
+                    else
+                        ColorFilter.tint(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
+                )
+            }
+
+            Spacer(modifier = Modifier.height(34.dp))
+            Text(
+                text = "Seleccioná tus preferencias:",
+                modifier = Modifier
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Start,
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontFamily = JetBrainsMono,
+                    fontSize = 16.sp
+                )
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                val sorted = preferences.toSortedMap(compareBy { if (it == "Otra") "zzzz" else it })
+                sorted.forEach { (label, checked) ->
+                    Card(
+                        modifier = Modifier.toggleable(
+                            value = checked,
                             onValueChange = { preferences[label] = it }
                         ),
-                    colors = CardDefaults.cardColors(
-                        containerColor = if (isChecked) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
-                    ),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(horizontal = 12.dp, vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (checked)
+                                MaterialTheme.colorScheme.primaryContainer
+                            else
+                                MaterialTheme.colorScheme.surface
+                        ),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                        shape = RoundedCornerShape(12.dp)
                     ) {
-                        Checkbox(
-                            checked = isChecked,
-                            onCheckedChange = null,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(text = label)
+                        Row(
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Checkbox(
+                                checked = checked,
+                                onCheckedChange = null,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = label,
+                                style = MaterialTheme.typography.bodyLarge.copy(
+                                    fontFamily = JetBrainsMono,
+                                    fontSize = 14.sp
+                                )
+                            )
+                        }
                     }
                 }
             }
+
+
+            val otraFieldHeight = 100.dp
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(otraFieldHeight)   // reservamos espacio fijo
+            ) {
+                if (preferences["Otra"] == true) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = otherPreference,
+                        onValueChange = { otherPreference = it },
+
+                        label = {
+                            Text(
+                                "Especificá tu preferencia",
+                                style = MaterialTheme.typography.bodyLarge.copy(
+                                    fontFamily = JetBrainsMono
+                                )
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = TextFieldDefaults.colors(
+                            unfocusedContainerColor = Color.White.copy(alpha = 0.3f),
+                            focusedContainerColor = Color.White.copy(alpha = 0.3f),
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            cursorColor = MaterialTheme.colorScheme.primary,
+                            unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            focusedIndicatorColor = MaterialTheme.colorScheme.primary
+                        )
+                    )
+                }
+            }
+                Spacer(modifier = Modifier.height(150.dp))
+                Button(
+                    onClick = { navController.navigate("start") },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = AccentPink,
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text("Cerrar sesión", fontSize = 16.sp)
+
+                }
+
         }
+    }
+}
 
+@Preview(showBackground = true)
+@Composable
+fun PreviewWelcomeScreenLight() {
+    App1Theme(darkTheme = false) {
+        WelcomeScreen(navController = rememberNavController())
+    }
+}
 
-        // Si elige "Otra", mostrar campo extra
-        if (preferences["Otra"] == true) {
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = otherPreference,
-                onValueChange = { otherPreference = it },
-                label = { Text("Especificá tu preferencia") },
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Button(
-            onClick = { navController.navigate("start") },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Cerrar sesión")
-        }
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun PreviewWelcomeScreenDark() {
+    App1Theme(darkTheme = true) {
+        WelcomeScreen(navController = rememberNavController())
     }
 }

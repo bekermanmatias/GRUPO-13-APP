@@ -33,7 +33,6 @@ import com.example.app1.ui.theme.App1Theme
 import com.example.app1.ui.theme.DarkText
 import com.example.app1.ui.theme.Error
 import com.example.app1.ui.theme.LocalAppGradients
-import kotlinx.coroutines.delay
 
 @Composable
 fun RegisterScreen(navController: NavController) {
@@ -87,6 +86,7 @@ fun RegisterScreen(navController: NavController) {
                     text = "¡Creemos tu nueva cuenta! ",
 
                     modifier = Modifier.padding(bottom = 8.dp, top = 8.dp),
+                    color = DarkText,
 
                 )
             }

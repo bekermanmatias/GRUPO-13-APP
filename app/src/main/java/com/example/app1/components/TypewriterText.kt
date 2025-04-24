@@ -5,24 +5,25 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.material3.Text
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.app1.ui.theme.DarkText
-import kotlinx.coroutines.delay
 
 @Composable
 fun TypewriterText(
     text: String,
     modifier: Modifier = Modifier,
     delayMillis: Long = 50L,
-    textStyle: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.headlineLarge.copy(
+    textStyle: TextStyle = MaterialTheme.typography.headlineLarge.copy(
         fontWeight = FontWeight.Bold,
         color = DarkText,
         fontSize = 26.sp
     ),
-    textAlign: TextAlign = TextAlign.Center
+    textAlign: TextAlign = TextAlign.Center,
+    color: Color
 ) {
     var displayedText by remember { mutableStateOf("") }
 
