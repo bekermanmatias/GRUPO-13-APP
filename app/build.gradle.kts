@@ -43,6 +43,7 @@ android {
 }
 
 dependencies {
+    testImplementation(libs.junit.jupiter)
     // Jetpack Compose BOM (maneja versiones de Compose automáticamente)
     val composeBom = platform("androidx.compose:compose-bom:2025.02.00")
     implementation(composeBom)

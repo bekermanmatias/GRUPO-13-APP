@@ -5,6 +5,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.app1.R.drawable.logdef
+import com.example.app1.components.TypewriterText
 import com.example.app1.ui.theme.AccentPink
 import com.example.app1.ui.theme.App1Theme
 import com.example.app1.ui.theme.DarkText
@@ -33,8 +38,10 @@ import com.example.app1.ui.theme.LocalAppGradients
 @Composable
 fun LoginScreen(navController: NavController) {
     var username by remember { mutableStateOf(TextFieldValue("")) }
-    var password by remember { mutableStateOf(TextFieldValue("")) }
     var errorMessage by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf(TextFieldValue("")) }
+    var passwordVisible by remember { mutableStateOf(false) }
+
 
     val gradientBackground = LocalAppGradients.current.background
 
@@ -66,16 +73,13 @@ fun LoginScreen(navController: NavController) {
                 contentScale = ContentScale.Crop
             )
 
-            Text(
-                text = "Bienvenid@!",
-                style = MaterialTheme.typography.headlineLarge.copy(
-                    fontWeight = FontWeight.Bold,
-                    color = DarkText,
-                    fontSize = 26.sp
-                ),
-                textAlign = TextAlign.Center,
+            TypewriterText(
+                text = "¡¡Bienvenid@!!",
                 modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)
             )
+
+
+
 
             // Columna para los campos de entrada y el mensaje de error
             Column(
@@ -114,12 +118,24 @@ fun LoginScreen(navController: NavController) {
                     )
                 )
 
+                Spacer(modifier = Modifier.height(3.dp))
+
+
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
                     label = { Text("Contraseña", color = DarkText.copy(alpha = 0.8f)) },
                     singleLine = true,
-                    visualTransformation = PasswordVisualTransformation(),
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    trailingIcon = {
+                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                            Icon(
+                                imageVector = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                                contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña",
+                                tint = DarkText
+                            )
+                        }
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.White.copy(alpha = 0.3f),
@@ -132,7 +148,9 @@ fun LoginScreen(navController: NavController) {
                     )
                 )
 
-                Spacer(modifier = Modifier.height(6.dp))
+
+                Spacer(modifier = Modifier.height(24.dp))
+
 
                 Button(
                     onClick = {
