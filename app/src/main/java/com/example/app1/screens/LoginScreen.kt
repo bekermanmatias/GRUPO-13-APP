@@ -32,8 +32,9 @@ import com.example.app1.components.TypewriterText
 import com.example.app1.ui.theme.AccentPink
 import com.example.app1.ui.theme.App1Theme
 import com.example.app1.ui.theme.DarkText
-import com.example.app1.ui.theme.Error
 import com.example.app1.ui.theme.LocalAppGradients
+import com.example.app1.components.ErrorMessage
+
 
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -91,17 +92,9 @@ fun LoginScreen(navController: NavController) {
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(2.dp) // Esto mantiene el espacio entre los elementos
             ) {
-                // Reservar espacio para el mensaje de error dentro del recuadro
-                if (errorMessage.isNotBlank()) {
-                    Text(
-                        text = errorMessage,
-                        color = Error,
-                        fontSize = 14.sp,
-                        modifier = Modifier
-                            .padding(bottom = 0.1.dp), // Espacio entre el error y el siguiente campo
-                        textAlign = TextAlign.Center
-                    )
-                }
+
+                ErrorMessage(message = errorMessage)
+
 
                 OutlinedTextField(
                     value = username,
@@ -159,8 +152,8 @@ fun LoginScreen(navController: NavController) {
                 Button(
                     onClick = {
                         errorMessage = when {
-                            username.text.isBlank() || password.text.isBlank() -> "Por favor, completá ambos campos."
-                            username.text != "Juan Torres" || password.text != "1234utn" -> "Usuario o contraseña incorrectos."
+                            username.text.isBlank() || password.text.isBlank() -> "Por favor, completá ambos campos "
+                            username.text != "Juan Torres" || password.text != "1234utn" -> "¡Ups! Verificá tu tus datos."
                             else -> {
                                 navController.navigate("welcome")
                                 ""
@@ -212,7 +205,6 @@ fun LoginScreen(navController: NavController) {
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.app1.R
+import com.example.app1.components.ErrorMessage
 import com.example.app1.components.TypewriterText
 import com.example.app1.ui.theme.*
 
@@ -51,6 +52,8 @@ fun WelcomeScreen(navController: NavController) {
     var otraPreferencia by remember { mutableStateOf(TextFieldValue("")) }
     var showDialog by remember { mutableStateOf(false) }
     var errorOtra by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
 
     Box(
         modifier = Modifier
@@ -224,29 +227,40 @@ fun WelcomeScreen(navController: NavController) {
                         unfocusedContainerColor = Color.White.copy(alpha = 0.3f)
                     )
                 )
-                if (errorOtra) {
-                    Text(
-                        text = "Por favor completá este campo con al menos 3 caracteres.",
-                        color = Color.Red,
-                        fontSize = 14.sp,
-                        modifier = Modifier.padding(start = 20.dp, top = 4.dp)
-                    )
-                }
+
+
 
             }
 
-            Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height(10.dp))
+
+            errorMessage?.let {
+                ErrorMessage(message = it, modifier = Modifier.padding(bottom = 12.dp))
+            }
+
 
             // Botón final
             Button(
                 onClick = {
-                    if (preferenciasSeleccionadas.contains("Otra") && otraPreferencia.text.length < 3) {
-                        errorOtra = true
-                    } else {
-                        errorOtra = false
-                        showDialog = true
+                    when {
+                        selectedPlatform == null -> {
+                            errorMessage = "Por favor seleccioná una plataforma."
+                        }
+                        preferenciasSeleccionadas.isEmpty() -> {
+                            errorMessage = "Seleccioná al menos una preferencia."
+                        }
+                        preferenciasSeleccionadas.contains("Otra") && otraPreferencia.text.length < 3 -> {
+                            errorMessage = "'Otra' debe tener al menos 3 caracteres."
+                            errorOtra = true
+                        }
+                        else -> {
+                            errorMessage = null
+                            errorOtra = false
+                            showDialog = true
+                        }
                     }
-                },
+                }
+                ,
 
                 modifier = Modifier
                     .fillMaxWidth()

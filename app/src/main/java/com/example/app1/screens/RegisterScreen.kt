@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.app1.R.drawable.logdef
+import com.example.app1.components.ErrorMessage
 import com.example.app1.components.TypewriterText
 import com.example.app1.ui.theme.AccentPink
 import com.example.app1.ui.theme.App1Theme
@@ -102,15 +103,8 @@ fun RegisterScreen(navController: NavController) {
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                if (errorMessage.isNotBlank()) {
-                    Text(
-                        text = errorMessage,
-                        color = Error,
-                        fontSize = 14.sp,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
+                ErrorMessage(message = errorMessage)
+
 
                 OutlinedTextField(
                     value = name,
