@@ -152,8 +152,8 @@ fun LoginScreen(navController: NavController) {
                 Button(
                     onClick = {
                         errorMessage = when {
-                            username.text.isBlank() || password.text.isBlank() -> "Por favor, completá ambos campos "
-                            username.text != "Juan Torres" || password.text != "1234utn" -> "¡Ups! Verificá tu tus datos."
+                            username.text.isBlank() || password.text.isBlank() -> "Por favor, completá ambos campos"
+                            username.text != "Juan Torres" || password.text != "1234utn" -> "¡Ups! Verificá tus datos."
                             else -> {
                                 navController.navigate("welcome")
                                 ""
@@ -167,10 +167,12 @@ fun LoginScreen(navController: NavController) {
                     colors = ButtonDefaults.buttonColors(
                         containerColor = AccentPink,
                         contentColor = Color.White
-                    )
+                    ),
+                    enabled = username.text.isNotBlank() && password.text.isNotBlank()  // Aquí controlamos si el botón está habilitado
                 ) {
                     Text("Iniciar sesión", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 }
+
 
                 Spacer(modifier = Modifier.height(6.dp))
 

@@ -45,8 +45,18 @@ fun RegisterScreen(navController: NavController) {
     var confirmVisible by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
 
-    val roundedShape = RoundedCornerShape(12.dp)
+    // Variable para habilitar/deshabilitar el botón
+    val isButtonEnabled = remember(name, email, password, confirmPassword) {
+        name.text.isNotBlank() &&
+                email.text.isNotBlank() &&
+                password.text.isNotBlank() &&
+                confirmPassword.text.isNotBlank() &&
+                isValidEmail(email.text) &&
+                password.text.length >= 6 &&
+                password.text == confirmPassword.text
+    }
 
+    val roundedShape = RoundedCornerShape(12.dp)
     val gradientBackground = LocalAppGradients.current.background
 
     Box(
@@ -87,10 +97,8 @@ fun RegisterScreen(navController: NavController) {
                 Spacer(modifier = Modifier.width(12.dp))
                 TypewriterText(
                     text = "¡Creemos tu nueva cuenta! ",
-
                     modifier = Modifier.padding(bottom = 8.dp, top = 8.dp),
                     color = DarkText,
-
                 )
             }
 
@@ -104,7 +112,6 @@ fun RegisterScreen(navController: NavController) {
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 ErrorMessage(message = errorMessage)
-
 
                 OutlinedTextField(
                     value = name,
@@ -200,30 +207,24 @@ fun RegisterScreen(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-
                 Button(
                     onClick = {
                         errorMessage = when {
                             name.text.isBlank() || email.text.isBlank() || password.text.isBlank() || confirmPassword.text.isBlank() ->
                                 "Por favor completá todos los campos."
-
                             !isValidEmail(email.text) ->
                                 "El email no es válido."
-
                             password.text.length < 6 ->
                                 "La contraseña debe tener al menos 6 caracteres."
-
                             password.text != confirmPassword.text ->
                                 "Las contraseñas no coinciden."
-
                             else -> {
-                                // Aquí podrías guardar el usuario o enviar a una API si tuvieras backend
                                 navController.navigate("Login")
                                 ""
                             }
                         }
-                    }
-                    ,
+                    },
+                    enabled = isButtonEnabled, // Botón habilitado solo si todos los campos son válidos
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
@@ -257,7 +258,6 @@ fun RegisterScreen(navController: NavController) {
                     TextButton(onClick = { navController.navigate("contact") }) {
                         Text("¿Necesitás ayuda? Contacto", color = DarkText.copy(alpha = 0.9f))
                     }
-
                 }
             }
         }
