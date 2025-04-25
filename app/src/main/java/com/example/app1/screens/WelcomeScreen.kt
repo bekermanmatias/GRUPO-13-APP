@@ -233,7 +233,7 @@ fun WelcomeScreen(navController: NavController) {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .height(48.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = AccentPink,
@@ -304,7 +304,7 @@ fun ChipPreferencia(
                 width = 1.dp,
                 color = if (seleccionada) AccentPink
                 else Color.Gray.copy(alpha = 0.3f),
-                shape = RoundedCornerShape(20.dp)
+                shape = RoundedCornerShape(12.dp),
             )
             .clickable { onClic() }
             .padding(horizontal = 20.dp, vertical = 12.dp)
