@@ -196,10 +196,11 @@ fun LoginScreen(navController: NavController) {
                 // Botón de contacto
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                     TextButton(onClick = {
-                        navController.navigate("contact")
+                        navController.navigate("recover") // Antes decía "contact"
                     }) {
-                        Text("¿Necesitás ayuda? Contacto", color = DarkText.copy(alpha = 0.9f))
+                        Text("¿Olvidaste tu contraseña?", color = DarkText.copy(alpha = 0.9f))
                     }
+
                 }
             }
         }

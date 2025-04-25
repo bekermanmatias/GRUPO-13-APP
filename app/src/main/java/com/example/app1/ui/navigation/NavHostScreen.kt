@@ -72,5 +72,10 @@ fun NavHostScreen() {
                 ContactScreen(navController)
             }
         }
+
+        composable("recover") {
+            RecoverPasswordScreen(navController)
+        }
+
     }
 }
