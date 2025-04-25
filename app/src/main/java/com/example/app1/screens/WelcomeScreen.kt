@@ -1,22 +1,26 @@
 package com.example.app1.screens
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll // <--- IMPORTANTE: Asegúrate de tener este import
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.rememberScrollState // <--- IMPORTANTE: Asegúrate de tener este import
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -30,27 +34,21 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.app1.R
 import com.example.app1.components.TypewriterText
-import com.example.app1.ui.theme.AccentPink
-import com.example.app1.ui.theme.App1Theme
-import com.example.app1.ui.theme.DarkText
-import com.example.app1.ui.theme.JetBrainsMono
-import com.example.app1.ui.theme.LocalAppGradients
+import com.example.app1.ui.theme.*
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun WelcomeScreen(navController: NavController) {
-    val preferences = remember {
-        mutableStateMapOf(
-            "Programación" to false,
-            "Redes" to false,
-            "Seguridad" to false,
-            "Hardware" to false,
-            "Otra" to false
-        )
-    }
-    var otherPreference by remember { mutableStateOf(TextFieldValue("")) }
     var selectedPlatform by remember { mutableStateOf<String?>(null) }
-
+    val opciones = listOf(
+        "Hardware", "Programación", "Redes", "Ciberseguridad", "Android Dev",
+        "iOS Dev", "Cloud Computing", "Machine Learning", "DevOps", "Blockchain",
+        "Inteligencia Artificial", "Bases de Datos", "APIs REST", "Frontend",
+        "Backend", "Git", "Linux", "Windows Server", "Testing", "UI/UX", "Otra"
+    )
+    val preferenciasSeleccionadas = remember { mutableStateListOf<String>() }
+    var otraPreferencia by remember { mutableStateOf(TextFieldValue("")) }
+    var showDialog by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -58,206 +56,268 @@ fun WelcomeScreen(navController: NavController) {
             .background(LocalAppGradients.current.background)
             .systemBarsPadding()
     ) {
+        // Fondo difuminado
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .blur(4.dp)
         )
+
+        // Scroll vertical GENERAL para toda la pantalla si es necesario
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState()) // Scroll vertical para toda la columna
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+            horizontalAlignment = Alignment.Start // Alineación a la izquierda
         ) {
+            Spacer(modifier = Modifier.height(28.dp))
 
-                    Spacer(modifier = Modifier.height(28.dp))
-
+            // Tipeo de bienvenida
             TypewriterText(
                 text = "¡Bienvenido a la app, Juan Torres!",
                 delayMillis = 50L,
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = 80.dp)
-                    .padding(start = 8.dp, end = 8.dp, bottom = 24.dp),
+                    .padding(horizontal = 8.dp, vertical = 8.dp),
                 textAlign = TextAlign.Start,
                 textStyle = MaterialTheme.typography.headlineSmall.copy(
                     fontFamily = JetBrainsMono,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
+                    fontSize = 28.sp, // Aumentar el tamaño de la fuente
                 ),
                 color = DarkText,
             )
 
+            Spacer(modifier = Modifier.height(32.dp))
 
-
-
-
-
-
-
-
+            // Selección de plataforma
             Text(
                 text = "Seleccioná tu plataforma:",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 12.dp),
+                    .padding(bottom = 8.dp),
                 textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontFamily = JetBrainsMono,
                     fontWeight = FontWeight.Medium,
-                    fontSize = 18.sp
+                    fontSize = 18.sp // Mantener el mismo tamaño
                 )
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                listOf("Android" to R.drawable.ic_android, "iOS" to R.drawable.ic_ios).forEach { (platform, iconRes) ->
-                    val isSelected = selectedPlatform == platform
+                listOf("Android" to R.drawable.ic_android, "iOS" to R.drawable.ic_ios)
+                    .forEach { (platform, iconRes) ->
+                        val isSelected = selectedPlatform == platform
+                        val scale by animateFloatAsState(if (isSelected) 1.1f else 1.0f)
 
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .clip(RoundedCornerShape(24.dp))
-                            .background(
-                                if (isSelected) AccentPink.copy(alpha = 0.1f) else Color.Transparent
-                            )
-                            .border(
-                                width = if (isSelected) 2.dp else 1.dp,
-                                color = if (isSelected) AccentPink else Color.Gray.copy(alpha = 0.2f),
-                                shape = RoundedCornerShape(24.dp)
-                            )
-                            .clickable { selectedPlatform = platform }
-                            .padding(vertical = 20.dp, horizontal = 24.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Image(
-                            painter = painterResource(id = iconRes),
-                            contentDescription = "Logo de $platform",
-                            modifier = Modifier.size(96.dp),
-                            colorFilter = ColorFilter.tint(
-                                if (isSelected) AccentPink else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                            )
-                        )
-
-                       
-                    }
-                }
-            }
-
-
-
-
-            Spacer(modifier = Modifier.height(34.dp))
-            Text(
-                text = "Seleccioná tus preferencias:",
-                modifier = Modifier
-                    .fillMaxWidth(),
-                textAlign = TextAlign.Start,
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    fontFamily = JetBrainsMono,
-                    fontSize = 16.sp
-                )
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                val sorted = preferences.toSortedMap(compareBy { if (it == "Otra") "zzzz" else it })
-                sorted.forEach { (label, checked) ->
-                    Card(
-                        modifier = Modifier.toggleable(
-                            value = checked,
-                            onValueChange = { preferences[label] = it }
-                        ),
-                        colors = CardDefaults.cardColors(
-                            containerColor = if (checked)
-                                MaterialTheme.colorScheme.primaryContainer
-                            else
-                                MaterialTheme.colorScheme.surface
-                        ),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                        Column(
+                            modifier = Modifier
+                                .padding(horizontal = 12.dp)
+                                .clip(RoundedCornerShape(24.dp))
+                                .background(if (isSelected) AccentPink.copy(alpha = 0.1f) else Color.Transparent)
+                                .border(
+                                    width = if (isSelected) 2.dp else 1.dp,
+                                    color = if (isSelected) AccentPink else Color.Gray.copy(alpha = 0.2f),
+                                    shape = RoundedCornerShape(24.dp)
+                                )
+                                .clickable { selectedPlatform = platform }
+                                .padding(vertical = 16.dp, horizontal = 20.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Checkbox(
-                                checked = checked,
-                                onCheckedChange = null,
-                                modifier = Modifier.size(18.dp)
-                            )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = label,
-                                style = MaterialTheme.typography.bodyLarge.copy(
-                                    fontFamily = JetBrainsMono,
-                                    fontSize = 14.sp
+                            Image(
+                                painter = painterResource(id = iconRes),
+                                contentDescription = "Logo de $platform",
+                                modifier = Modifier
+                                    .size(96.dp)
+                                    .scale(scale),
+                                colorFilter = ColorFilter.tint(
+                                    if (isSelected) AccentPink else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                                 )
                             )
                         }
                     }
-                }
             }
 
+            Spacer(modifier = Modifier.height(32.dp))
 
-            val otraFieldHeight = 100.dp
-            Box(
+            // Selección de preferencias
+            Text(
+                text = "Seleccioná tus preferencias:",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(otraFieldHeight)   // reservamos espacio fijo
-            ) {
-                if (preferences["Otra"] == true) {
-                    OutlinedTextField(
-                        value = otherPreference,
-                        onValueChange = { otherPreference = it },
+                    .padding(horizontal = 8.dp, vertical = 12.dp),
+                textAlign = TextAlign.Start,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontFamily = JetBrainsMono,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 18.sp // Mantener el mismo tamaño
+                )
+            )
 
-                        label = {
-                            Text(
-                                "Especificá tu preferencia",
-                                style = MaterialTheme.typography.bodyLarge.copy(
-                                    fontFamily = JetBrainsMono
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Contenedor ÚNICO: Aumentar altura para mostrar todas las preferencias
+            Box(
+                modifier = Modifier
+                    .height(180.dp) // Aumentar la altura para acomodar más filas
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 6.dp)
+                    .horizontalScroll(rememberScrollState()) // Habilita scroll horizontal
+            ) {
+                // Agrupamos los chips en filas
+                Column {
+                    opciones.chunked(7).forEach { fila -> // Cambia 6 por el número de chips que deseas por fila
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp) // Espacio horizontal entre chips
+                        ) {
+                            fila.forEach { opcion ->
+                                ChipPreferencia(
+                                    opcion = opcion,
+                                    seleccionada = preferenciasSeleccionadas.contains(opcion),
+                                    onClic = {
+                                        if (preferenciasSeleccionadas.contains(opcion)) {
+                                            preferenciasSeleccionadas.remove(opcion)
+                                            if (opcion == "Otra") otraPreferencia = TextFieldValue("")
+                                        } else {
+                                            preferenciasSeleccionadas.add(opcion)
+                                        }
+                                    }
                                 )
-                            )
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = TextFieldDefaults.colors(
-                            unfocusedContainerColor = Color.White.copy(alpha = 0.3f),
-                            focusedContainerColor = Color.White.copy(alpha = 0.3f),
-                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            cursorColor = MaterialTheme.colorScheme.primary,
-                            unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                            focusedIndicatorColor = MaterialTheme.colorScheme.primary
-                        )
-                    )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(8.dp)) // Espacio vertical entre filas
+                    }
                 }
             }
-                Spacer(modifier = Modifier.height(150.dp))
-                Button(
-                    onClick = { navController.navigate("start") },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = AccentPink,
-                        contentColor = Color.White
+
+            // Campo "Otra" animado
+            AnimatedVisibility(
+                visible = "Otra" in preferenciasSeleccionadas,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                OutlinedTextField(
+                    value = otraPreferencia,
+                    onValueChange = { otraPreferencia = it },
+                    label = { Text("Especificá tu preferencia", color = DarkText.copy(alpha = 0.8f)) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    textStyle = LocalTextStyle.current.copy(fontFamily = JetBrainsMono),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = AccentPink,
+                        unfocusedBorderColor = Color.Gray.copy(alpha = 0.3f),
+                        cursorColor = AccentPink,
+                        focusedContainerColor = Color.White.copy(alpha = 0.3f),
+                        unfocusedContainerColor = Color.White.copy(alpha = 0.3f)
                     )
-                ) {
-                    Text("Comenzar", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                )
+            }
 
+            Spacer(modifier = Modifier.height(60.dp))
 
-                }
+            // Botón final
+            Button(
+                onClick = {
+                    if (otraPreferencia.text.length >= 3 || !preferenciasSeleccionadas.contains("Otra")) {
+                        showDialog = true
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = AccentPink,
+                    contentColor = Color.White
+                ),
+                enabled = selectedPlatform != null && preferenciasSeleccionadas.isNotEmpty() // Deshabilitar si no hay selección
+            ) {
+                Text("Comenzar", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            }
 
+            Spacer(modifier = Modifier.height(16.dp))
         }
+
+        // Diálogo de confirmación
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = { Text("Confirmación") },
+                text = {
+                    Column {
+                        Text("Has seleccionado la plataforma: $selectedPlatform")
+                        Text("Tus preferencias:")
+                        Column {
+                            preferenciasSeleccionadas.forEach { preferencia ->
+                                Text(preferencia)
+                                // Aquí puedes agregar el logo correspondiente a cada preferencia si lo deseas
+                            }
+                            if (preferenciasSeleccionadas.contains("Otra") && otraPreferencia.text.isNotBlank()) {
+                                Text("Otra preferencia: ${otraPreferencia.text}")
+                            }
+                        }
+                    }
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            navController.navigate("start")
+                            showDialog = false
+                        }
+                    ) {
+                        Text("Confirmar")
+                    }
+                },
+                dismissButton = {
+                    Button(onClick = { showDialog = false }) {
+                        Text("Cancelar")
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun ChipPreferencia(
+    opcion: String,
+    seleccionada: Boolean,
+    onClic: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .background(
+                if (seleccionada) AccentPink.copy(alpha = 0.2f)
+                else MaterialTheme.colorScheme.surface
+            )
+            .border(
+                width = 1.dp,
+                color = if (seleccionada) AccentPink
+                else Color.Gray.copy(alpha = 0.3f),
+                shape = RoundedCornerShape(20.dp)
+            )
+            .clickable { onClic() }
+            .padding(horizontal = 20.dp, vertical = 12.dp)
+    ) {
+        Text(
+            text = opcion,
+            color = if (seleccionada) AccentPink
+            else MaterialTheme.colorScheme.onSurface,
+            fontSize = 16.sp,
+            fontFamily = JetBrainsMono,
+            fontWeight = FontWeight.Medium
+        )
     }
 }
 
