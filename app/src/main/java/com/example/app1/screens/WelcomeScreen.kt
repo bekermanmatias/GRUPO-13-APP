@@ -3,6 +3,7 @@ package com.example.app1.screens
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -37,7 +39,6 @@ import com.example.app1.ui.theme.LocalAppGradients
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun WelcomeScreen(navController: NavController) {
-    var selectedPlatform by remember { mutableStateOf("Android") }
     val preferences = remember {
         mutableStateMapOf(
             "Programación" to false,
@@ -48,6 +49,7 @@ fun WelcomeScreen(navController: NavController) {
         )
     }
     var otherPreference by remember { mutableStateOf(TextFieldValue("")) }
+    var selectedPlatform by remember { mutableStateOf<String?>(null) }
 
 
     Box(
@@ -76,14 +78,13 @@ fun WelcomeScreen(navController: NavController) {
                 delayMillis = 50L,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(100.dp)               // altura fija para no reflujo
-                    .padding(bottom = 24.dp),
+                    .heightIn(min = 80.dp)
+                    .padding(start = 8.dp, end = 8.dp, bottom = 24.dp),
                 textAlign = TextAlign.Start,
                 textStyle = MaterialTheme.typography.headlineSmall.copy(
                     fontFamily = JetBrainsMono,
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp,
-                              // coincide con la altura reservada
                 ),
                 color = DarkText,
             )
@@ -95,46 +96,62 @@ fun WelcomeScreen(navController: NavController) {
 
 
 
+
             Text(
                 text = "Seleccioná tu plataforma:",
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp),
                 textAlign = TextAlign.Start,
-                style = MaterialTheme.typography.bodyLarge.copy(
+                style = MaterialTheme.typography.titleMedium.copy(
                     fontFamily = JetBrainsMono,
-                    fontSize = 16.sp
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 18.sp
                 )
             )
-            Spacer(modifier = Modifier.height(24.dp))
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_android),
-                    contentDescription = "Logo de Android",
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clickable { selectedPlatform = "Android" },
-                    colorFilter = if (selectedPlatform == "Android")
-                        ColorFilter.tint(AccentPink)
-                    else
-                        ColorFilter.tint(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
-                )
-                Spacer(modifier = Modifier.width(48.dp))
-                Image(
-                    painter = painterResource(id = R.drawable.ic_ios),
-                    contentDescription = "Logo de iOS",
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clickable { selectedPlatform = "iOS" },
-                    colorFilter = if (selectedPlatform == "iOS")
-                        ColorFilter.tint(AccentPink)
-                    else
-                        ColorFilter.tint(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
-                )
+                listOf("Android" to R.drawable.ic_android, "iOS" to R.drawable.ic_ios).forEach { (platform, iconRes) ->
+                    val isSelected = selectedPlatform == platform
+
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .clip(RoundedCornerShape(24.dp))
+                            .background(
+                                if (isSelected) AccentPink.copy(alpha = 0.1f) else Color.Transparent
+                            )
+                            .border(
+                                width = if (isSelected) 2.dp else 1.dp,
+                                color = if (isSelected) AccentPink else Color.Gray.copy(alpha = 0.2f),
+                                shape = RoundedCornerShape(24.dp)
+                            )
+                            .clickable { selectedPlatform = platform }
+                            .padding(vertical = 20.dp, horizontal = 24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(id = iconRes),
+                            contentDescription = "Logo de $platform",
+                            modifier = Modifier.size(96.dp),
+                            colorFilter = ColorFilter.tint(
+                                if (isSelected) AccentPink else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                            )
+                        )
+
+                       
+                    }
+                }
             }
+
+
+
 
             Spacer(modifier = Modifier.height(34.dp))
             Text(
@@ -200,7 +217,6 @@ fun WelcomeScreen(navController: NavController) {
                     .height(otraFieldHeight)   // reservamos espacio fijo
             ) {
                 if (preferences["Otra"] == true) {
-                    Spacer(modifier = Modifier.height(8.dp))
                     OutlinedTextField(
                         value = otherPreference,
                         onValueChange = { otherPreference = it },
@@ -236,7 +252,8 @@ fun WelcomeScreen(navController: NavController) {
                         contentColor = Color.White
                     )
                 ) {
-                    Text("Cerrar sesión", fontSize = 16.sp)
+                    Text("Comenzar", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+
 
                 }
 

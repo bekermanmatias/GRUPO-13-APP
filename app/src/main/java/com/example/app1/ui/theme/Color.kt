@@ -25,16 +25,18 @@ val WhiteOpacity05 = Color(0x0DFFFFFF)
 // Nuevos colores
 val RosaPálido = Color(0xFFDAA0AF)
 val AzulClaro = Color(0xFFA3D3EC)
-val RosaSuave = Color(0xFFE8CED6)
-val GrisAzulado = Color(0xFFC8D3DC)
+val RosaSuave = Color(0xFFFFCDD2)
+val GrisAzulado = Color(0xFFBBDEFB)
 val DarkText = Color(0xFF24334D)
 val AccentPink = Color(0xFFF47B8D)
 val Error = Color(0xFFEA273E)
 
 
+
+
 // Gradientes personalizados con nuevos colores
 val LightGradient = Brush.verticalGradient(
-    listOf(RosaPálido, AzulClaro)
+    listOf(RosaSuave, GrisAzulado)
 )
 
 val DarkGradient = Brush.verticalGradient(
