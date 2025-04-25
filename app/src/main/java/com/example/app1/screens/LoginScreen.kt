@@ -42,6 +42,7 @@ fun LoginScreen(navController: NavController) {
     var password by remember { mutableStateOf(TextFieldValue("")) }
     var passwordVisible by remember { mutableStateOf(false) }
 
+    val roundedShape = RoundedCornerShape(12.dp)
 
     val gradientBackground = LocalAppGradients.current.background
 
@@ -107,6 +108,7 @@ fun LoginScreen(navController: NavController) {
                     onValueChange = { username = it },
                     label = { Text("Nombre de usuario", color = DarkText.copy(alpha = 0.8f)) },
                     singleLine = true,
+                    shape = roundedShape,
                     modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.White.copy(alpha = 0.3f),
@@ -127,6 +129,7 @@ fun LoginScreen(navController: NavController) {
                     onValueChange = { password = it },
                     label = { Text("Contraseña", color = DarkText.copy(alpha = 0.8f)) },
                     singleLine = true,
+                    shape = roundedShape,
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         IconButton(onClick = { passwordVisible = !passwordVisible }) {

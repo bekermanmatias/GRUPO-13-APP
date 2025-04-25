@@ -44,6 +44,8 @@ fun RegisterScreen(navController: NavController) {
     var confirmVisible by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
 
+    val roundedShape = RoundedCornerShape(12.dp)
+
     val gradientBackground = LocalAppGradients.current.background
 
     Box(
@@ -115,6 +117,7 @@ fun RegisterScreen(navController: NavController) {
                     onValueChange = { name = it },
                     label = { Text("Nombre", color = DarkText.copy(alpha = 0.8f)) },
                     singleLine = true,
+                    shape = roundedShape,
                     modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.White.copy(alpha = 0.3f),
@@ -132,6 +135,7 @@ fun RegisterScreen(navController: NavController) {
                     onValueChange = { email = it },
                     label = { Text("Email", color = DarkText.copy(alpha = 0.8f)) },
                     singleLine = true,
+                    shape = roundedShape,
                     modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.White.copy(alpha = 0.3f),
@@ -149,6 +153,7 @@ fun RegisterScreen(navController: NavController) {
                     onValueChange = { password = it },
                     label = { Text("Contraseña", color = DarkText.copy(alpha = 0.8f)) },
                     singleLine = true,
+                    shape = roundedShape,
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         IconButton(onClick = { passwordVisible = !passwordVisible }) {
@@ -176,6 +181,7 @@ fun RegisterScreen(navController: NavController) {
                     onValueChange = { confirmPassword = it },
                     label = { Text("Repetir contraseña", color = DarkText.copy(alpha = 0.8f)) },
                     singleLine = true,
+                    shape = roundedShape,
                     visualTransformation = if (confirmVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         IconButton(onClick = { confirmVisible = !confirmVisible }) {
@@ -204,14 +210,26 @@ fun RegisterScreen(navController: NavController) {
                 Button(
                     onClick = {
                         errorMessage = when {
-                            name.text.isBlank() || email.text.isBlank() -> "Por favor completá todos los campos."
-                            password.text != confirmPassword.text -> "Las contraseñas no coinciden."
+                            name.text.isBlank() || email.text.isBlank() || password.text.isBlank() || confirmPassword.text.isBlank() ->
+                                "Por favor completá todos los campos."
+
+                            !isValidEmail(email.text) ->
+                                "El email no es válido."
+
+                            password.text.length < 6 ->
+                                "La contraseña debe tener al menos 6 caracteres."
+
+                            password.text != confirmPassword.text ->
+                                "Las contraseñas no coinciden."
+
                             else -> {
-                                navController.navigate("login")
+                                // Aquí podrías guardar el usuario o enviar a una API si tuvieras backend
+                                navController.navigate("welcome")
                                 ""
                             }
                         }
-                    },
+                    }
+                    ,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
@@ -238,7 +256,7 @@ fun RegisterScreen(navController: NavController) {
                         contentColor = DarkText
                     )
                 ) {
-                    Text("Iniciar sesión", fontSize = 16.sp)
+                    Text("Ya tengo cuenta", fontSize = 16.sp)
                 }
 
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
@@ -250,6 +268,10 @@ fun RegisterScreen(navController: NavController) {
             }
         }
     }
+}
+
+fun isValidEmail(email: String): Boolean {
+    return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
 }
 
 

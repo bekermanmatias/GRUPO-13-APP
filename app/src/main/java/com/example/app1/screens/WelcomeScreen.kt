@@ -41,10 +41,9 @@ import com.example.app1.ui.theme.*
 fun WelcomeScreen(navController: NavController) {
     var selectedPlatform by remember { mutableStateOf<String?>(null) }
     val opciones = listOf(
-        "Hardware", "Programación", "Redes", "Ciberseguridad", "Android Dev",
-        "iOS Dev", "Cloud Computing", "Machine Learning", "DevOps", "Blockchain",
-        "Inteligencia Artificial", "Bases de Datos", "APIs REST", "Frontend",
-        "Backend", "Git", "Linux", "Windows Server", "Testing", "UI/UX", "Otra"
+        "Hardware", "Programación", "Redes", "Seguridad", "DevOps", "Blockchain",
+        "IA", "Bases de Datos", "APIs REST", "Frontend", "Backend", "Git",
+        "Cloud", "Linux", "Windows Server", "Testing", "UI/UX", "Otra"
     )
     val preferenciasSeleccionadas = remember { mutableStateListOf<String>() }
     var otraPreferencia by remember { mutableStateOf(TextFieldValue("")) }
@@ -174,7 +173,7 @@ fun WelcomeScreen(navController: NavController) {
             ) {
                 // Agrupamos los chips en filas
                 Column {
-                    opciones.chunked(7).forEach { fila -> // Cambia 6 por el número de chips que deseas por fila
+                    opciones.chunked(6).forEach { fila -> // Cambia 6 por el número de chips que deseas por fila
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(6.dp) // Espacio horizontal entre chips
