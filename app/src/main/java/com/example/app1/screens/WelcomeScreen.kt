@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState // <--- IMPORTANTE: Asegúrate de tener este import
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -48,6 +50,7 @@ fun WelcomeScreen(navController: NavController) {
     val preferenciasSeleccionadas = remember { mutableStateListOf<String>() }
     var otraPreferencia by remember { mutableStateOf(TextFieldValue("")) }
     var showDialog by remember { mutableStateOf(false) }
+    var errorOtra by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -211,6 +214,7 @@ fun WelcomeScreen(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp),
+                    shape = RoundedCornerShape(12.dp),
                     textStyle = LocalTextStyle.current.copy(fontFamily = JetBrainsMono),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = AccentPink,
@@ -220,6 +224,15 @@ fun WelcomeScreen(navController: NavController) {
                         unfocusedContainerColor = Color.White.copy(alpha = 0.3f)
                     )
                 )
+                if (errorOtra) {
+                    Text(
+                        text = "Por favor completá este campo con al menos 3 caracteres.",
+                        color = Color.Red,
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(start = 20.dp, top = 4.dp)
+                    )
+                }
+
             }
 
             Spacer(modifier = Modifier.height(60.dp))
@@ -227,10 +240,14 @@ fun WelcomeScreen(navController: NavController) {
             // Botón final
             Button(
                 onClick = {
-                    if (otraPreferencia.text.length >= 3 || !preferenciasSeleccionadas.contains("Otra")) {
+                    if (preferenciasSeleccionadas.contains("Otra") && otraPreferencia.text.length < 3) {
+                        errorOtra = true
+                    } else {
+                        errorOtra = false
                         showDialog = true
                     }
                 },
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),
@@ -247,43 +264,108 @@ fun WelcomeScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        // Diálogo de confirmación
         if (showDialog) {
             AlertDialog(
                 onDismissRequest = { showDialog = false },
-                title = { Text("Confirmación") },
+                title = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.CheckCircle,
+                            contentDescription = null,
+                            tint = AccentPink,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            "Tu selección:",
+                            color = DarkText,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                },
                 text = {
-                    Column {
-                        Text("Has seleccionado la plataforma: $selectedPlatform")
-                        Text("Tus preferencias:")
-                        Column {
-                            preferenciasSeleccionadas.forEach { preferencia ->
-                                Text(preferencia)
-                                // Aquí puedes agregar el logo correspondiente a cada preferencia si lo deseas
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.padding(horizontal = 4.dp)
+                    ) {
+                        Text(
+                            "Plataforma:",
+                            fontWeight = FontWeight.Medium,
+                            color = DarkText
+                        )
+                        Text(
+                            "  $selectedPlatform",
+                            fontSize = 16.sp,
+                            color = DarkText,
+                            lineHeight = 20.sp
+                        )
+
+                        Text(
+                            "Preferencias:",
+                            fontWeight = FontWeight.Medium,
+                            color = DarkText
+                        )
+
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            preferenciasSeleccionadas.filter { it != "Otra" }.forEach { preferencia ->
+                                Text("  • $preferencia", color = DarkText)
                             }
+
                             if (preferenciasSeleccionadas.contains("Otra") && otraPreferencia.text.isNotBlank()) {
-                                Text("Otra preferencia: ${otraPreferencia.text}")
+                                Text("  • Otra: ${otraPreferencia.text}", color = DarkText)
                             }
+
                         }
                     }
                 },
                 confirmButton = {
-                    Button(
-                        onClick = {
-                            navController.navigate("start")
-                            showDialog = false
+                    Column {
+                        Button(
+                            onClick = {
+                                navController.navigate("start")
+                                showDialog = false
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 1.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = AccentPink,
+                                contentColor = Color.White
+                            ),
+                            shape = RoundedCornerShape(12.dp)
+                        ) {
+                            Text("Avanzar", fontSize = 16.sp)
                         }
-                    ) {
-                        Text("Confirmar")
+
+                        Spacer(modifier = Modifier.height(0.1.dp))
+
+                        OutlinedButton(
+                            onClick = { showDialog = false },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 1.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                contentColor = DarkText
+                            )
+                        ) {
+                            Text("Modificar", fontSize = 16.sp)
+                        }
                     }
                 },
-                dismissButton = {
-                    Button(onClick = { showDialog = false }) {
-                        Text("Cancelar")
-                    }
-                }
+                containerColor = Color.White,
+                shape = RoundedCornerShape(16.dp)
             )
         }
+
+
+
+
     }
 }
 
@@ -295,7 +377,7 @@ fun ChipPreferencia(
 ) {
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(12.dp))
             .background(
                 if (seleccionada) AccentPink.copy(alpha = 0.2f)
                 else MaterialTheme.colorScheme.surface

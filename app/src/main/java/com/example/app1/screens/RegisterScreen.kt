@@ -224,7 +224,7 @@ fun RegisterScreen(navController: NavController) {
 
                             else -> {
                                 // Aquí podrías guardar el usuario o enviar a una API si tuvieras backend
-                                navController.navigate("welcome")
+                                navController.navigate("Login")
                                 ""
                             }
                         }
