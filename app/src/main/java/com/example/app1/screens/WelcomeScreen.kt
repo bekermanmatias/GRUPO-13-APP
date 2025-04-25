@@ -219,12 +219,14 @@ fun WelcomeScreen(navController: NavController) {
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                     shape = RoundedCornerShape(12.dp),
                     textStyle = LocalTextStyle.current.copy(fontFamily = JetBrainsMono),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = AccentPink,
-                        unfocusedBorderColor = Color.Gray.copy(alpha = 0.3f),
-                        cursorColor = AccentPink,
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = Color.White.copy(alpha = 0.3f),
                         focusedContainerColor = Color.White.copy(alpha = 0.3f),
-                        unfocusedContainerColor = Color.White.copy(alpha = 0.3f)
+                        unfocusedTextColor = DarkText,
+                        focusedTextColor = DarkText,
+                        cursorColor = DarkText,
+                        unfocusedIndicatorColor = DarkText.copy(alpha = 0.5f),
+                        focusedIndicatorColor = DarkText
                     )
                 )
 

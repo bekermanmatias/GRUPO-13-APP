@@ -46,15 +46,14 @@ fun RegisterScreen(navController: NavController) {
     var errorMessage by remember { mutableStateOf("") }
 
     // Variable para habilitar/deshabilitar el botón
+    // Variable para habilitar/deshabilitar el botón
     val isButtonEnabled = remember(name, email, password, confirmPassword) {
         name.text.isNotBlank() &&
                 email.text.isNotBlank() &&
                 password.text.isNotBlank() &&
-                confirmPassword.text.isNotBlank() &&
-                isValidEmail(email.text) &&
-                password.text.length >= 6 &&
-                password.text == confirmPassword.text
+                confirmPassword.text.isNotBlank()
     }
+
 
     val roundedShape = RoundedCornerShape(12.dp)
     val gradientBackground = LocalAppGradients.current.background
@@ -213,7 +212,7 @@ fun RegisterScreen(navController: NavController) {
                             name.text.isBlank() || email.text.isBlank() || password.text.isBlank() || confirmPassword.text.isBlank() ->
                                 "Por favor completá todos los campos."
                             !isValidEmail(email.text) ->
-                                "El email no es válido."
+                                "Ingresa un email válido."
                             password.text.length < 6 ->
                                 "La contraseña debe tener al menos 6 caracteres."
                             password.text != confirmPassword.text ->
@@ -224,7 +223,7 @@ fun RegisterScreen(navController: NavController) {
                             }
                         }
                     },
-                    enabled = isButtonEnabled, // Botón habilitado solo si todos los campos son válidos
+                    enabled = isButtonEnabled, // Botón habilitado solo si todos los campos están llenos
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
@@ -236,6 +235,8 @@ fun RegisterScreen(navController: NavController) {
                 ) {
                     Text("Registrarse", fontSize = 16.sp)
                 }
+
+
 
                 Spacer(modifier = Modifier.height(0.1.dp))
 
