@@ -252,7 +252,7 @@ fun WelcomeScreen(navController: NavController) {
                             errorMessage = "Seleccioná al menos una preferencia."
                         }
                         preferenciasSeleccionadas.contains("Otra") && otraPreferencia.text.length < 3 -> {
-                            errorMessage = "'Otra' debe tener al menos 3 caracteres."
+                            errorMessage = "'Otra' debe contener al menos 3 caracteres."
                             errorOtra = true
                         }
                         else -> {
@@ -274,7 +274,7 @@ fun WelcomeScreen(navController: NavController) {
                 ),
                 enabled = selectedPlatform != null && preferenciasSeleccionadas.isNotEmpty() // Deshabilitar si no hay selección
             ) {
-                Text("Comenzar", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text("Siguente", fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
 
             Spacer(modifier = Modifier.height(16.dp))

@@ -8,88 +8,97 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.app1.R
+import com.example.app1.ui.theme.AccentPink
+import com.example.app1.ui.theme.DarkText
+import com.example.app1.ui.theme.LocalAppGradients
 
 @Composable
 fun StartScreen(navController: NavController) {
+    val gradientBackground = LocalAppGradients.current.background
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF6a11cb).copy(alpha = 0.9f),
-                        Color(0xFF2575fc).copy(alpha = 0.9f)
-                    )
-                )
-            )
+            .background(gradientBackground)
+            .systemBarsPadding()
     ) {
+        // Fondo difuminado
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .blur(4.dp)
+        )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp),
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center // Centra los elementos verticalmente
+            verticalArrangement = Arrangement.Center
         ) {
-            // Logo en la parte superior
+            // Logo
             Image(
-                painter = painterResource(id = R.drawable.ic_logo),
+                painter = painterResource(id = R.drawable.logdef),
                 contentDescription = "App Logo",
                 modifier = Modifier
-                    .size(200.dp)
-                    .clip(RoundedCornerShape(24.dp)) // Aplica el redondeo
-                    .background(Color.White.copy(alpha = 0.1f)), // Fondo opcional
+                    .size(160.dp)
+                    .clip(RoundedCornerShape(24.dp)),
                 contentScale = ContentScale.Crop
             )
 
-            Spacer(modifier = Modifier.height(80.dp))  // Espacio entre el logo y los botones
+            Spacer(modifier = Modifier.height(32.dp))
 
-            // Botón de Iniciar sesión
-            Button(
-                onClick = { navController.navigate("login") },
+            // Botones
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = Color(0xFF6a11cb)
-                )
+                    .background(Color.White.copy(alpha = 0.3f), RoundedCornerShape(24.dp))
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Text(
-                    "Iniciar sesión",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
-                )
-            }
+                Button(
+                    onClick = { navController.navigate("login") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = AccentPink,
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text(
+                        text = "Iniciar sesión",
+                        fontSize = 16.sp
+                    )
+                }
 
-            Spacer(modifier = Modifier.height(20.dp))  // Espacio entre los botones
-
-            // Botón de Registrarse
-            Button(
-                onClick = { navController.navigate("register") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = Color(0xFF6a11cb)
-                )
-            ) {
-                Text(
-                    "Registrarse",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
-                )
+                OutlinedButton(
+                    onClick = { navController.navigate("register") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = DarkText
+                    ),
+                    border = ButtonDefaults.outlinedButtonBorder
+                ) {
+                    Text(
+                        text = "Registrarse",
+                        fontSize = 16.sp
+                    )
+                }
             }
         }
     }
